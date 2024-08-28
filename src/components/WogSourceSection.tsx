@@ -1,66 +1,47 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, TextField } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/types'; // You'll need to create this
+import { updateField } from '../store/formSlice'; // You'll need to move this to a separate file
+import { TextField } from '@material-ui/core';
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
-interface Props {
-  formData: {
-    source: string;
-    arinc429?: {
-      label: string;
-      bit: number;
-    };
-  };
-  onChange: (value: any) => void;
-}
 
-const WogSourceSection: React.FC<Props> = ({ formData, onChange }) => {
-  const handleChange = (name: string, value: any) => {
-    onChange({
-      ...formData,
-      [name]: value
-    });
-  };
+const WogSourceSection: React.FC = () => {
 
-  const handleArinc429Change = (name: string, value: any) => {
-    onChange({
-      ...formData,
-      arinc429: {
-        ...formData.arinc429,
-        [name]: value
-      }
-    });
-  };
+  const dispatch = useDispatch();
+  const { wog_source } = useSelector((state: RootState) => state.form);
 
   return (
     <>
-      <h2>WOG Source</h2>
       <FormControl fullWidth margin="normal">
         <InputLabel>Source</InputLabel>
         <Select
-          value={formData.source}
-          onChange={(e) => handleChange('source', e.target.value as string)}
+          value={wog_source.source}
+          onChange={(e) => dispatch(updateField({ path: 'wog_source.source', value: e.target.value as string}))}
         >
           <MenuItem value="A429">A429</MenuItem>
           <MenuItem value="Discrete">Discrete</MenuItem>
           <MenuItem value="Virtual">Virtual</MenuItem>
         </Select>
       </FormControl>
-      {formData.source === 'A429' && (
+      {wog_source.source === 'A429' && (
         <>
           <TextField
             fullWidth
             margin="normal"
             name="label"
             label="A429 Label"
-            value={formData.arinc429?.label}
-            onChange={(e) => handleArinc429Change('label', e.target.value)}
+            value={wog_source.arinc429?.label}
+            onChange={(e) => dispatch(updateField({ path: 'wog_source.arinc429.label', value: e.target.value }))}
+
           />            
           <TextField
             fullWidth
             margin="normal"
             label="ARINC429 Bit"
             type="number"
-            value={formData.arinc429?.bit}
-            onChange={(e) => handleArinc429Change('bit', Number(e.target.value))}
+            value={wog_source.arinc429?.bit}
+            onChange={(e) => dispatch(updateField({ path: 'wog_source.arinc429.bit', value: Number(e.target.value) }))}
             inputProps={{ min: 0, max: 31 }}
           />
         </>
