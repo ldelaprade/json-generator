@@ -28,9 +28,12 @@ interface WOGSource
     arinc429: WOGSource2Arinc429
 }
 
+export interface Arinc429Labels {
+  [key: string]: number;
+}
 interface Arinc429
 {
-    labels: {}
+    labels: Arinc429Labels
 }
 
 interface IgnoredBitsCore
@@ -75,6 +78,22 @@ export interface FormState {
     ignored_bits: IgnoredBits;
   }
 
+
+  const generateInitialLabels = (): Arinc429Labels => {
+    const labels: Arinc429Labels = {};
+    const prefixes = ['0', '01'];
+    const suffixes = ['', '-0', '-1', '-2', '-3'];
+  
+    prefixes.forEach(prefix => {
+      suffixes.forEach(suffix => {
+        const label = `${prefix}${suffix}`;
+        labels[label] = 0;
+      });
+    });
+  
+    return labels;
+  };
+
 const initialState: FormState = 
 {
     version: '',
@@ -102,7 +121,7 @@ const initialState: FormState =
     },
 
     arinc429: {
-      labels: {}
+      labels: generateInitialLabels()
     },
 
     ignored_bits: {

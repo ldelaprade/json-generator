@@ -1,0 +1,45 @@
+.grid-table-container {
+    margin: 0px;
+    font-family: Arial, sans-serif;
+    height: 400px;
+    overflow-y: auto;    
+  }
+  
+  .grid-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .grid-table th, .grid-table td {
+    border: 1px solid #ddd;
+    padding: 2px;
+    text-align: left;
+  }
+  
+  .grid-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .grid-table input, .grid-table select {
+    width: 70%;
+    padding: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .remove-btn, .add-btn {
+    background-color: ivory;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .add-btn {
+    background-color: #4CAF50;
+    margin-top: 10px;
+  }
+  
+  .remove-btn:hover, .add-btn:hover {
+    opacity: 0.8;
+  }
+  

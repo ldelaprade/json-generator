@@ -1,10 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/types'; // You'll need to create this
-import { updateField } from '../store/formSlice'; // You'll need to move this to a separate file
+import { RootState } from '../../store/types'; // You'll need to create this
+import { updateField } from '../../store/formSlice'; // You'll need to move this to a separate file
 
 import { TextField, Checkbox, FormControlLabel } from '@material-ui/core';
-import { Container, Button, makeStyles, Snackbar } from '@material-ui/core';
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 

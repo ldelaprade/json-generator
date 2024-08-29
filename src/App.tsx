@@ -7,16 +7,8 @@ import { RootState } from './store/types';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import Wizard from './components/Wizard';
+import Wizard from './components/wizard/Wizard';
 import './App.css';
-
-
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
-import Ajv from 'ajv';
-import schemaModel from './schema_model.json';
-
-const ajv = new Ajv({ allErrors: true });
-const validate = ajv.compile(schemaModel);
 
 
 // Main App component

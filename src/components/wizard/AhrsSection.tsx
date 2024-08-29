@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/types';
-import { updateField } from '../store/formSlice';
+import { RootState } from '../../store/types';
+import { updateField } from '../../store/formSlice';
 
 import { TextField } from '@material-ui/core';
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';

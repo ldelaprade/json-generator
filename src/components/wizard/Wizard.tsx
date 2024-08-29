@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import '../App.css';
+import '../../App.css';
 
 import VersionUrlSection from './VersionUrlSection';
 import AhrsSection from './AhrsSection';
 import WogSourceSection from './WogSourceSection';
 import IgnoredBitsSection from './IgnoredBitsSection';
-
+import Arinc429Section from './Arinc429Section'
 
 // Wizard component
 const Wizard: React.FC = () => {
@@ -15,7 +15,7 @@ const Wizard: React.FC = () => {
       { name: 'General', component: <VersionUrlSection /> },
       { name: 'AHRS', component: <AhrsSection /> },
       { name: 'WOG Source', component: <WogSourceSection /> },
-      { name: 'ARINC429 Labels', component: <ARINC429LabelsPage /> },
+      { name: 'ARINC429 Labels', component: <Arinc429Section /> },
       { name: 'Ignored Bits', component: <IgnoredBitsSection /> }
     ];
   
@@ -53,21 +53,6 @@ const Wizard: React.FC = () => {
     );
   };
   
-  
-  const WOGSourcePage: React.FC = () => {
-    // Similar structure to GeneralPage, but for WOG Source fields
-    return <div>WOG Source Page</div>;
-  };
-  
-  const ARINC429LabelsPage: React.FC = () => {
-    // Similar structure to GeneralPage, but for ARINC429 Labels
-    return <div>ARINC429 Labels Page</div>;
-  };
-  
-  const IgnoredBitsPage: React.FC = () => {
-    // Similar structure to GeneralPage, but for Ignored Bits
-    return <div>Ignored Bits Page</div>;
-  };
 
 
   export default Wizard;
