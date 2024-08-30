@@ -31,18 +31,18 @@ const Wizard: React.FC = () => {
       }
     };
   
+    
     return (
       <div className="wizard">
 
-        <div >
+        <div className="wizard-page-container">
           <h3>{pages[currentPage].name}</h3>
           {pages[currentPage].component}
         </div>
   
-        <div className="wizard-status-bar">
-            <span></span>
+        <div className="wizard-navbar">
             <div className="buttons">
-                <button onClick={handlePrevious} disabled={currentPage === 0}>Prev. page</button>
+                <button style={{marginLeft: 0}} onClick={handlePrevious} disabled={currentPage === 0} >Prev. page</button>
                 <button onClick={handleNext}  disabled={currentPage === pages.length - 1}>Next page</button>
             </div>
         </div>

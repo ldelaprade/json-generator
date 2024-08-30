@@ -27,30 +27,36 @@ const A429GridTable: React.FC = () => {
     ));
   };
 
+
+  const cellStyle: React.CSSProperties = {
+    border: '1px solid ivory',
+  };
+
+    
   return (
     <>
       <button onClick={addRow} className="add-btn">Add Label</button>
       <div className="grid-table-container">     
         <table className="grid-table">
-          <thead>
+          <thead style={{ position: 'sticky', top: 0, backgroundColor: '#f2f2f2' }}>
             <tr>
               <th style={{ width: '30%' }}>Label</th>
               <th style={{ width: '30%' }}>SDI</th>
               <th style={{ width: '20%' }} >Rate</th>
-              <th style={{ width: '10%' }}> </th>
+              <th style={{ width: '5%' }}> </th>
             </tr>
           </thead>
           <tbody>
             {rows.map(row => (
-              <tr key={row.id}>
-                <td>
+              <tr key={row.id} >
+                <td style={cellStyle}>
                   <input 
                     type="text"
                     value={row.label} 
                     onChange={(e) => updateRow(row.id, 'label', e.target.value)}
                   />
                 </td>
-                <td>
+                <td style={cellStyle}><div className="grid-cell-overflow">
                   <select 
                     value={row.sdi}
                     onChange={(e) => updateRow(row.id, 'sdi', e.target.value as Row['sdi'])}
@@ -61,8 +67,8 @@ const A429GridTable: React.FC = () => {
                     <option value="-2">2</option>
                     <option value="-3">3</option>
                   </select>
-                </td>
-                <td>
+                </div></td>
+                <td style={cellStyle}><div className="grid-cell-overflow">
                   <select 
                     value={row.rate.toString()}
                     onChange={(e) => updateRow(row.id, 'rate', parseInt(e.target.value) as Row['rate'])}
@@ -71,10 +77,17 @@ const A429GridTable: React.FC = () => {
                       <option key={rate} value={rate.toString()}>{rate}</option>
                     ))}
                   </select>
-                </td>
-                <td>
-                  <button onClick={() => removeRow(row.id)} className="remove-btn">🗑️</button>
-                </td>
+                </div></td>
+                <td style={cellStyle}><div>
+                  <button
+                    style={{ 
+                      backgroundColor: 'transparent', 
+                      cursor: 'pointer',
+                      margin: 0,
+                      border: 0 
+                    }}                  
+                   onClick={() => removeRow(row.id)} className="remove-btn">🗑️</button>
+                </div></td>
               </tr>
             ))}
           </tbody>
