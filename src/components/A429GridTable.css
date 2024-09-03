@@ -4,7 +4,6 @@
     height: 400px;
     overflow-y: auto;  
     border: 1px solid lightgrey;
-
   }
   
   .grid-table {
@@ -37,13 +36,12 @@
     border: 1px solid #ddd;
   }
   
-  .remove-btn, .add-btn {
+  .remove-btn, .add-btn, remove-all-btn {
     cursor: pointer;
   }
   
   .add-btn {
     margin-left: 0px;
-
   }
   
   .remove-btn:hover, .add-btn:hover {

@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 
 import { useSelector } from 'react-redux';
-import { setFormState } from '../store/formSlice';
+import { setFormState, Arinc429, GridState } from '../store/formSlice';
 import { store } from '../store/store';
 import { RootState } from '../store/types';
 import { Snackbar } from '@material-ui/core';
@@ -18,6 +18,20 @@ export const configSchemaValidator = ajv.compile(configSchema);
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+interface OutputJson {
+  a429Rows: {
+      rows: Array<{ [key: string]: number }>;
+  };
+}
+
+
+function a429LabelsToArray(input: Arinc429): GridState {
+  const labels = Object.entries(input.labels).map(([key, value]) => ({ 'label': key, 'rate': value }));
+
+  //console.info('Labels:', labels);  
+  return { rows: labels};
 }
 
 const Sidebar: React.FC = () => {
@@ -44,12 +58,20 @@ const Sidebar: React.FC = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          const json_from_file = JSON.parse(e.target?.result as string);
-          store.dispatch(setFormState(json_from_file));
+          let json_from_file = JSON.parse(e.target?.result as string);
+          // Transform A429 labels props to an array (grid compatible)
+          const loadedRows = a429LabelsToArray(json_from_file.arinc429);
+          json_from_file.arinc429.labels = {};
+          json_from_file['a429Rows'] = loadedRows;
+          store.dispatch(setFormState(json_from_file));    
+
         } catch (error) {
           console.error('Error parsing JSON file:', error);
           alert('Error loading file. Please make sure it\'s a valid JSON file.');
         }
+
+    
+
       };
       reader.readAsText(file);
     }

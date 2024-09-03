@@ -17,14 +17,14 @@ import A429GridTable from '../A429GridTable'
 
 const Arinc429Section: React.FC = () => {
 
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const { arinc429 } = useSelector((state: RootState) => state.form);
 
-  const { register } = useForm<Arinc429Labels>();
+  // const { register } = useForm<Arinc429Labels>();
 
-  const A429LabelPath = (label: string) => {
-      return "arinc429.labels." + label;
-  };  
+  // const A429LabelPath = (label: string) => {
+  //     return "arinc429.labels." + label;
+  // };  
 
   // <FormGroup className="arinc-labels">
   //   {Object.keys(configSchema.properties.arinc429.properties.labels.properties).map((label) => (
@@ -48,7 +48,7 @@ const Arinc429Section: React.FC = () => {
 
   return (
     <>
-      <A429GridTable />
+      {A429GridTable(arinc429)}
     </>
   );
 };

@@ -31,10 +31,24 @@ interface WOGSource
 export interface Arinc429Labels {
   [key: string]: number;
 }
-interface Arinc429
+export interface Arinc429
 {
     labels: Arinc429Labels
 }
+
+
+// we need an array for arinc429 labels grid
+export interface GridRow {
+  label: string;
+  rate: number;
+}
+
+export interface GridState {
+  rows: GridRow[];
+}
+
+
+
 
 interface IgnoredBitsCore
 {
@@ -75,24 +89,25 @@ export interface FormState {
     ahrs: AHRS;
     wog_source: WOGSource;
     arinc429: Arinc429;
+    a429Rows: GridState;
     ignored_bits: IgnoredBits;
   }
 
 
-  const generateInitialLabels = (): Arinc429Labels => {
-    const labels: Arinc429Labels = {};
-    const prefixes = ['0', '01'];
-    const suffixes = ['', '-0', '-1', '-2', '-3'];
+  // const generateInitialLabels = (): Arinc429Labels => {
+  //   const labels: Arinc429Labels = {};
+  //   const prefixes = ['0', '01'];
+  //   const suffixes = ['', '-0', '-1', '-2', '-3'];
   
-    prefixes.forEach(prefix => {
-      suffixes.forEach(suffix => {
-        const label = `${prefix}${suffix}`;
-        labels[label] = 0;
-      });
-    });
+  //   prefixes.forEach(prefix => {
+  //     suffixes.forEach(suffix => {
+  //       const label = `${prefix}${suffix}`;
+  //       labels[label] = 0;
+  //     });
+  //   });
   
-    return labels;
-  };
+  //   return labels;
+  // };
 
 const initialState: FormState = 
 {
@@ -121,8 +136,13 @@ const initialState: FormState =
     },
 
     arinc429: {
-      labels: generateInitialLabels()
+      labels: {}
     },
+
+    a429Rows: {
+      rows: [],
+    },
+
 
     ignored_bits: {
       core: {
@@ -166,10 +186,32 @@ const formSlice = createSlice({
     },
     setFormState: (state, action: PayloadAction<FormState>) => {
       return action.payload;
-    }
+    },
+
+    // Specifics to a429 labels array
+     
+    addRow: (state) => {
+      state.a429Rows.rows.push({ label: '', rate: 0 });
+    },
+    removeRow: (state, action: PayloadAction<number>) => {
+      state.a429Rows.rows.splice(action.payload, 1);
+    },
+    updateLabel: (state, action: PayloadAction<{ index: number; value: string }>) => {
+      const { index, value } = action.payload;
+      state.a429Rows.rows[index].label = value;
+    },
+    updateRate: (state, action: PayloadAction<{ index: number; value: number }>) => {
+      const { index, value } = action.payload;
+      state.a429Rows.rows[index].rate = value;
+    },
+    setRows: (state, action: PayloadAction<GridRow[]>) => {
+      state.a429Rows.rows = action.payload;
+    },    
+
+
   }
 });
 
 
-export const { updateField, setFormState } = formSlice.actions;
+export const { updateField, setFormState, addRow, removeRow, updateLabel, updateRate, setRows } = formSlice.actions;
 export default formSlice.reducer;
