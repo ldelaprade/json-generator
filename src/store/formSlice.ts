@@ -85,29 +85,24 @@ export interface FormState {
     date_time_source: string;
     poweroff_delay: number;
     update_status: boolean,
-
     ahrs: AHRS;
     wog_source: WOGSource;
-    arinc429: Arinc429;
     a429Rows: GridState;
     ignored_bits: IgnoredBits;
   }
 
-
-  // const generateInitialLabels = (): Arinc429Labels => {
-  //   const labels: Arinc429Labels = {};
-  //   const prefixes = ['0', '01'];
-  //   const suffixes = ['', '-0', '-1', '-2', '-3'];
-  
-  //   prefixes.forEach(prefix => {
-  //     suffixes.forEach(suffix => {
-  //       const label = `${prefix}${suffix}`;
-  //       labels[label] = 0;
-  //     });
-  //   });
-  
-  //   return labels;
-  // };
+  // Match json config : no Grid !
+  export interface ConfigState {
+    version: string;
+    url: string;
+    date_time_source: string;
+    poweroff_delay: number;
+    update_status: boolean,
+    ahrs: AHRS;
+    wog_source: WOGSource;
+    arinc429: Arinc429;
+    ignored_bits: IgnoredBits;
+  }
 
 const initialState: FormState = 
 {
@@ -133,10 +128,6 @@ const initialState: FormState =
         label: '0',
         bit: 0
       }
-    },
-
-    arinc429: {
-      labels: {}
     },
 
     a429Rows: {

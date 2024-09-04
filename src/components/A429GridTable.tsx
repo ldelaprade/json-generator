@@ -5,58 +5,12 @@ import './A429GridTable.css';
 import { addRow, removeRow, updateLabel, updateRate, setRows  } from '../store/formSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/types';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { Arinc429Labels } from '../store/formSlice';
 
-
-type Row = {
-  id: number;
-  label: string;
-  rate: number;
-};
 
 const A429GridTable: React.FC = () => {
 
-  // const dispatch = useDispatch();
-  // const { arinc429 } = useSelector((state: RootState) => state.form);
-  // const { register } = useForm<Arinc429Labels>();
-
   const rows = useSelector((state: RootState) => state.form.a429Rows.rows);
   const dispatch = useDispatch();
-
-
-  // const [a429labels, setA429labels] = useState<Arinc429Labels>({});
-  // const [rows, setRows] = useState<Row[]>([]);
-  // const [nextId, setNextId] = useState(1);
-
-
-  // const gridRefredh = () => {
-  //   const newRows: Row[] = [];
-  //   const labels = a429labels;
-  //   let id = 1;
-
-  //   for (const label in labels) {
-  //     newRows.push({ id, label, rate: labels[label] });
-  //     id++;
-  //   }
-
-  //   setRows(newRows);
-  //   setNextId(id);
-  // }
-
-  // useEffect(() => {
-  //   const newRows: Row[] = [];
-  //   const labels = a429labels;
-  //   let id = 1;
-
-  //   for (const label in labels) {
-  //     newRows.push({ id, label, rate: labels[label] });
-  //     id++;
-  //   }
-
-  //   setRows(newRows);
-  //   setNextId(id);
-  // }, [a429labels]);
 
   const handleAddRow = () => {
     dispatch(addRow());
@@ -75,45 +29,11 @@ const A429GridTable: React.FC = () => {
   };
 
 
-  //function A429ModifiedState() {
-  //   return rows.reduce((acc, row) => {
-  //          acc[row.label] = row.rate;
-  //         return acc;
-  //       }, {} as { [key: string]: number });
-  // }
-  
-
-  // const syncA429Backend = () => {
-  //   setA429labels(A429ModifiedState());
-  // }
-
-  
-
-  // const validateChange = () => {
-  //   syncA429Backend();
-  //   gridRefredh();
-  // };
-
-
-  // const addRow = () => {
-  //   setRows([...rows, { id: nextId, label: '', rate: 0 }]);
-  //   setNextId(nextId + 1);
-  // };
 
   const removeAll = () => {
     dispatch(setRows([]));
   };
 
-  // const removeRow = (id: number) => {
-  //   setRows(rows.filter(row => row.id !== id));
-  //   //syncA429Backend();
-  // };
-
-  // const updateRow = (id: number, field: keyof Row, value: string | number) => {
-  //   setRows(rows.map(row => 
-  //     row.id === id ? { ...row, [field]: value } : row
-  //   ));
-  // };
 
 
   const cellStyle: React.CSSProperties = {

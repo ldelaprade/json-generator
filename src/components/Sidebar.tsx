@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 
 import { useSelector } from 'react-redux';
-import { setFormState, Arinc429, GridState } from '../store/formSlice';
+import { setFormState, Arinc429, GridState, FormState, ConfigState } from '../store/formSlice';
 import { store } from '../store/store';
 import { RootState } from '../store/types';
 import { Snackbar } from '@material-ui/core';
@@ -20,11 +20,6 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-interface OutputJson {
-  a429Rows: {
-      rows: Array<{ [key: string]: number }>;
-  };
-}
 
 
 function a429LabelsToArray(input: Arinc429): GridState {
@@ -33,6 +28,23 @@ function a429LabelsToArray(input: Arinc429): GridState {
   //console.info('Labels:', labels);  
   return { rows: labels};
 }
+
+function arrayToA429Labels(input: GridState): Arinc429  {
+
+    // Initialize an empty object to hold the transformed labels
+    const transformedLabels: { [key: string]: number } = {};
+
+    // Iterate over the array and create key-value pairs using 'label' and 'rate'
+    input.rows.forEach((item: { label: string, rate: number }) => {
+      transformedLabels[item.label] = item.rate;
+  });
+
+    // Return the transformed object
+    return {
+            labels: transformedLabels
+        }
+};
+
 
 const Sidebar: React.FC = () => {
 
@@ -59,18 +71,27 @@ const Sidebar: React.FC = () => {
       reader.onload = (e) => {
         try {
           let json_from_file = JSON.parse(e.target?.result as string);
-          // Transform A429 labels props to an array (grid compatible)
-          const loadedRows = a429LabelsToArray(json_from_file.arinc429);
-          json_from_file.arinc429.labels = {};
-          json_from_file['a429Rows'] = loadedRows;
-          store.dispatch(setFormState(json_from_file));    
+          const loadedState: FormState = 
+          {
+              version: formData.version,
+              url:  formData.url,
+              date_time_source:  formData.date_time_source,
+              poweroff_delay:  formData.poweroff_delay,
+              update_status:  formData.update_status,
+              ahrs: formData.ahrs,
+              wog_source:formData.wog_source,
+              // Transform A429 labels props to an array (grid compatible)
+              a429Rows: a429LabelsToArray(json_from_file.arinc429),
+              ignored_bits: formData.ignored_bits     
+          };          
 
-        } catch (error) {
+          store.dispatch(setFormState(loadedState));
+        }
+        catch (error) 
+        {
           console.error('Error parsing JSON file:', error);
           alert('Error loading file. Please make sure it\'s a valid JSON file.');
         }
-
-    
 
       };
       reader.readAsText(file);
@@ -87,7 +108,22 @@ const Sidebar: React.FC = () => {
 
   const handleGenerateJson = () => {
 
-    if (!configSchemaValidator(formData)) 
+    const modifiedState: ConfigState = 
+    {
+        version: formData.version,
+        url:  formData.url,
+        date_time_source:  formData.date_time_source,
+        poweroff_delay:  formData.poweroff_delay,
+        update_status:  formData.update_status,
+
+        ahrs: formData.ahrs,
+        wog_source:formData.wog_source,
+        arinc429: arrayToA429Labels(formData.a429Rows),
+        ignored_bits: formData.ignored_bits     
+    };
+
+
+    if (!configSchemaValidator(modifiedState) )
     {
         const allErrors = (configSchemaValidator.errors || []).map(error => `${error.dataPath}: ${error.message}`);
         setErrors(allErrors);
@@ -96,7 +132,7 @@ const Sidebar: React.FC = () => {
     else 
     {
       // Generate JSON
-        const jsonOutput = JSON.stringify(formData, null, 2);
+        const jsonOutput = JSON.stringify(modifiedState, null, 2);
       
         // Create a Blob with the JSON data
         const blob = new Blob([jsonOutput], { type: 'application/json' });
