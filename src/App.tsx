@@ -1,10 +1,6 @@
-import React, { useState, useRef } from 'react';
-
-import { useSelector, Provider } from 'react-redux';
-import { setFormState } from './store/formSlice';
+import React from 'react';
+import {  Provider } from 'react-redux';
 import { store } from './store/store';
-import { RootState } from './store/types';
-
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Wizard from './components/wizard/Wizard';
