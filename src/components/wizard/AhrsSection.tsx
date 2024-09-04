@@ -20,7 +20,7 @@ const AhrsSection: React.FC = () => {
         <InputLabel>Frequency</InputLabel>
         <Select
           value={ahrs.frequency}
-          onChange={(e) => dispatch(updateField({ path: 'ahrs.frequency', value: e.target.value }))}
+          onChange={(e) => dispatch(updateField({ path: 'ahrs.frequency', value: Number(e.target.value) }))}
           >
           <MenuItem value={0}>0</MenuItem>
           <MenuItem value={1}>1</MenuItem>
@@ -33,7 +33,7 @@ const AhrsSection: React.FC = () => {
         label="Yaw"
         type="number"
         value={ahrs.body_frame.yaw}
-        onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.yaw', value: e.target.value }))}
+        onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.yaw', value: Number(e.target.value) }))}
       />
       <TextField
         fullWidth
@@ -41,7 +41,7 @@ const AhrsSection: React.FC = () => {
         label="Pitch"
         type="number"
         value={ahrs.body_frame.pitch}
-        onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.pitch', value: e.target.value }))}
+        onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.pitch', value: Number(e.target.value) }))}
       />
       <TextField
         fullWidth
@@ -49,13 +49,13 @@ const AhrsSection: React.FC = () => {
         label="Roll"
         type="number"
         value={ahrs.body_frame.roll}
-        onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.roll', value: e.target.value }))}
+        onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.roll', value: Number(e.target.value) }))}
       />
       <FormControl fullWidth margin="normal">
         <InputLabel>Orientation Mode</InputLabel>
         <Select
           value={ahrs.body_frame.orientation_mode}
-          onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.orientation_mode', value: e.target.value }))}
+          onChange={(e) => dispatch(updateField({ path: 'ahrs.body_frame.orientation_mode', value: Number(e.target.value) }))}
         >
           <MenuItem value={-1}>-1</MenuItem>
           <MenuItem value={0}>0</MenuItem>

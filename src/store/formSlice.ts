@@ -118,7 +118,7 @@ const initialState: FormState =
         yaw: 0,
         pitch: 0,
         roll: 0,
-        orientation_mode: -1
+        orientation_mode: 0
       }
     },
 

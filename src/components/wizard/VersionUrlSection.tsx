@@ -65,7 +65,7 @@ const VersionUrlSection: React.FC = () => {
             label="Poweroff Delay"
             type="number"
             value={poweroff_delay}
-            onChange={(e) => dispatch(updateField({ path: 'poweroff_delay', value: e.target.value}))}
+            onChange={(e) => dispatch(updateField({ path: 'poweroff_delay', value: Number(e.target.value)}))}
         />
 
     </>

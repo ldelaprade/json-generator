@@ -73,16 +73,16 @@ const Sidebar: React.FC = () => {
           let json_from_file = JSON.parse(e.target?.result as string);
           const loadedState: FormState = 
           {
-              version: formData.version,
-              url:  formData.url,
-              date_time_source:  formData.date_time_source,
-              poweroff_delay:  formData.poweroff_delay,
-              update_status:  formData.update_status,
-              ahrs: formData.ahrs,
-              wog_source:formData.wog_source,
+              version: json_from_file.version,
+              url:  json_from_file.url,
+              date_time_source:  json_from_file.date_time_source,
+              poweroff_delay:  json_from_file.poweroff_delay,
+              update_status:  json_from_file.update_status,
+              ahrs: json_from_file.ahrs,
+              wog_source:json_from_file.wog_source,
               // Transform A429 labels props to an array (grid compatible)
               a429Rows: a429LabelsToArray(json_from_file.arinc429),
-              ignored_bits: formData.ignored_bits     
+              ignored_bits: json_from_file.ignored_bits     
           };          
 
           store.dispatch(setFormState(loadedState));
