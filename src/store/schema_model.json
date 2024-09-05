@@ -136,6 +136,7 @@
             "additionalProperties": false,
             "properties":
             {
+ 
                 "labels":
                 {
                     "type": "object",

@@ -1,0 +1,51 @@
+.grid-table-container {
+    margin: 0px;
+    font-family: Arial, sans-serif;
+    height: 400px;
+    overflow-y: auto;  
+    border: 1px solid lightgrey;
+  }
+  
+  .grid-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .grid-table th, .grid-table td {
+    border: 1px solid #ddd;
+    padding-top:0%;
+    padding-bottom:0%;
+    text-align: left;
+  }
+  
+  .grid-table th {
+    background-color: #f2f2f2;
+    line-height: 25px;
+  }
+
+  .grid-cell-overflow {
+    max-height:26px;
+}
+
+  .grid-table input, .grid-table select {
+    width: 95%;
+    height:100%;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: 1px solid #ddd;
+  }
+  
+  .remove-btn, .add-btn, remove-all-btn {
+    cursor: pointer;
+  }
+  
+  .add-btn {
+    margin-left: 0px;
+  }
+  
+  .remove-btn:hover, .add-btn:hover {
+    opacity: 0.8;
+  }
+  
+
