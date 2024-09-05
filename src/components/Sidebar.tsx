@@ -108,6 +108,17 @@ const Sidebar: React.FC = () => {
 
   const handleGenerateJson = () => {
 
+    const uniqueItems = new Set(Object.entries(formData.a429Rows.rows).map(([key, value]) => value.label));
+    const hasDuplicate = uniqueItems.size !== formData.a429Rows.rows.length;
+
+    console.log(uniqueItems);
+    if( hasDuplicate )
+    {
+      setErrors(["A429 labels contains duplicates. Please fix then retry"]);
+      setShowError(true);
+      return;
+    }
+    
     const modifiedState: ConfigState = 
     {
         version: formData.version,

@@ -188,8 +188,8 @@ const formSlice = createSlice({
       state.a429Rows.rows.splice(action.payload, 1);
     },
     updateLabel: (state, action: PayloadAction<{ index: number; value: string }>) => {
-      const { index, value } = action.payload;
-      state.a429Rows.rows[index].label = value;
+        const { index, value } = action.payload;
+        state.a429Rows.rows[index].label = value;
     },
     updateRate: (state, action: PayloadAction<{ index: number; value: number }>) => {
       const { index, value } = action.payload;
