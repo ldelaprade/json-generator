@@ -50,7 +50,12 @@
     ],
     "directories": {
       "buildResources": "assets"
-    }
+    },
+
+    "win": {
+      "icon": "build/logo512.png"
+    }    
+
   },
   "eslintConfig": {
     "extends": [
