@@ -12,9 +12,11 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { configSchema }  from '../store/configSchema';
 import Ajv from 'ajv';
 
+
+//import FileManager from '../FileManager.js';
+
 const ajv = new Ajv();
 export const configSchemaValidator = ajv.compile(configSchema);
-
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -95,6 +97,8 @@ const Sidebar: React.FC = () => {
 
       };
       reader.readAsText(file);
+      // So next time we reselect that file, it helps system think there was a change
+      if(fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -144,7 +148,12 @@ const Sidebar: React.FC = () => {
     {
       // Generate JSON
         const jsonOutput = JSON.stringify(modifiedState, null, 2);
-      
+
+        // const f = new FileManager();
+        // f.Save(jsonOutput);
+
+
+
         // Create a Blob with the JSON data
         const blob = new Blob([jsonOutput], { type: 'application/json' });
         const url = URL.createObjectURL(blob);

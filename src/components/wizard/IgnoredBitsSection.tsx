@@ -118,7 +118,7 @@ const IgnoredBitsSection: React.FC = () => {
         <FormControlLabel style={{ width: '25%' }}
               control={
                 <Checkbox
-                  checked={ignored_bits.core.cellular_main_antenna_open}
+                  checked={ignored_bits.core.cellular_diversity_antenna_open}
                   onChange={(e) => dispatch(updateField({ path: 'ignored_bits.core.cellular_diversity_antenna_open', value: e.target.checked }))}
                   name="cellular_diversity_antenna_open"
                 />
