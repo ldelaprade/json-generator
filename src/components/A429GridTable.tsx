@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './A429GridTable.css';
 
 import { Snackbar } from '@material-ui/core';
@@ -14,23 +14,39 @@ const A429GridTable: React.FC = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState<string[]>([]);
   const [showError, setShowError] = useState(false);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [lastAddedIndex, setLastAddedIndex] = useState<number | null>(null);
+
+
+  useEffect(() => {
+    if (lastAddedIndex !== null && inputRefs.current[lastAddedIndex]) {
+      inputRefs.current[lastAddedIndex]?.focus();
+      setLastAddedIndex(null);
+    }
+  }, [lastAddedIndex]);
+
 
   function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
   
 
+
   const handleAddRow = () => {
     dispatch(addRow());
+    setLastAddedIndex(rows.length);    
   };
 
   const handleRemoveRow = (index: number) => {
     dispatch(removeRow(index));
+   // setError(null);
+    inputRefs.current = inputRefs.current.filter((_, i) => i !== index);
   };
+
 
   const handleLabelChange = (index: number, value: string) => {
       dispatch(updateLabel({ index, value }));
-  };
+    };
 
   // Validate the input onBlur
   const handleBlur = (index: number, value: string) => {
@@ -105,9 +121,12 @@ const A429GridTable: React.FC = () => {
                 <td style={cellStyle}>
                   <input 
                     type="text"
-                    value={row.label} 
+                    value={row.label}
+                    placeholder={row.label ? '' : "Please, enter a valid label"}
                     onChange={(e) => handleLabelChange(index, e.target.value)}
                     onBlur={(e) => handleBlur(index, e.target.value)}
+                    // that will sync last row position
+                    ref={(el) => (inputRefs.current[index] = el)}
                   />
                 </td>
 
