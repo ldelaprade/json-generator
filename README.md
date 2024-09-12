@@ -14,12 +14,6 @@ The question asked to Claude AI was:
 **Hi,
 I'd like to create an user friendly application which help me to generate a json file base on the rules defined in the json schema file: schema_model.json**
 
-Have a look at the conversation.
-
-* It first created a python app,
-* we then asked it to translate to C# ==> the result could not build and run on linux
-* we then asked it to retry using Typescript + REACT ==> result was workable !
-* we then asked it to help with migrating that to Electron standalone app ==> Here is the amazing working result
 
 ## Available Scripts
 
