@@ -14,9 +14,10 @@ const A429GridTable: React.FC = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState<string[]>([]);
   const [showError, setShowError] = useState(false);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [lastAddedIndex, setLastAddedIndex] = useState<number | null>(null);
 
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const selectRefs = useRef<(HTMLSelectElement | null)[]>([]);
 
   useEffect(() => {
     if (lastAddedIndex !== null && inputRefs.current[lastAddedIndex]) {
@@ -31,6 +32,25 @@ const A429GridTable: React.FC = () => {
   }
   
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>, index: number, isInput: boolean) => {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const newIndex = event.key === 'ArrowUp' ? index - 1 : index + 1;
+      if (newIndex >= 0 && newIndex < rows.length) {
+        if (isInput) {
+          inputRefs.current[newIndex]?.focus();
+        } else {
+          selectRefs.current[newIndex]?.focus();
+        }
+      }
+    } else if (event.key === 'ArrowRight' && isInput) {
+      event.preventDefault();
+      selectRefs.current[index]?.focus();
+    } else if (event.key === 'ArrowLeft' && !isInput) {
+      event.preventDefault();
+      inputRefs.current[index]?.focus();
+    }
+  };
 
   const handleAddRow = () => {
     dispatch(addRow());
@@ -39,8 +59,9 @@ const A429GridTable: React.FC = () => {
 
   const handleRemoveRow = (index: number) => {
     dispatch(removeRow(index));
-   // setError(null);
+    setErrors([]);
     inputRefs.current = inputRefs.current.filter((_, i) => i !== index);
+    selectRefs.current = selectRefs.current.filter((_, i) => i !== index);    
   };
 
 
@@ -125,6 +146,7 @@ const A429GridTable: React.FC = () => {
                     placeholder={row.label ? '' : "Please, enter a valid label"}
                     onChange={(e) => handleLabelChange(index, e.target.value)}
                     onBlur={(e) => handleBlur(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(e, index, true)}
                     // that will sync last row position
                     ref={(el) => (inputRefs.current[index] = el)}
                   />
@@ -134,6 +156,8 @@ const A429GridTable: React.FC = () => {
                   <select 
                     value={row.rate}
                     onChange={(e) => handleRateChange(index, Number(e.target.value))}
+                    onKeyDown={(e) => handleKeyDown(e, index, false)}
+                    ref={(el) => (selectRefs.current[index] = el)}
                   >
                     {[0, 1, 2, 4, 8, 16].map(rate => (
                       <option key={rate} value={rate.toString()}>{rate}</option>
