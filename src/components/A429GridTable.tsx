@@ -1,36 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './A429GridTable.css';
 
-import { Snackbar } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { addRow, removeRow, updateLabel, updateRate, setRows  } from '../store/formSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/types';
+import { useSnackbar } from '../App';
+
 
 
 const A429GridTable: React.FC = () => {
 
+  const { openSnackbar } = useSnackbar();
+
   const rows = useSelector((state: RootState) => state.form.a429Rows.rows);
   const dispatch = useDispatch();
-  const [errors, setErrors] = useState<string[]>([]);
-  const [showError, setShowError] = useState(false);
   const [lastAddedIndex, setLastAddedIndex] = useState<number | null>(null);
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const selectRefs = useRef<(HTMLSelectElement | null)[]>([]);
 
   useEffect(() => {
-    if (lastAddedIndex !== null && inputRefs.current[lastAddedIndex]) {
+    if (lastAddedIndex !== null && inputRefs && inputRefs.current[lastAddedIndex]) {
       inputRefs.current[lastAddedIndex]?.focus();
       setLastAddedIndex(null);
     }
   }, [lastAddedIndex]);
 
 
-  function Alert(props: AlertProps) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
-  
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>, index: number, isInput: boolean) => {
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -59,7 +55,6 @@ const A429GridTable: React.FC = () => {
 
   const handleRemoveRow = (index: number) => {
     dispatch(removeRow(index));
-    setErrors([]);
     inputRefs.current = inputRefs.current.filter((_, i) => i !== index);
     selectRefs.current = selectRefs.current.filter((_, i) => i !== index);    
   };
@@ -71,30 +66,29 @@ const A429GridTable: React.FC = () => {
 
   // Validate the input onBlur
   const handleBlur = (index: number, value: string) => {
-    const isDuplicate = rows.some((row, i) => i !== index && row.label === value);
-    const isEmpty = !value.trim();
-    const isError = isDuplicate || isEmpty;
-    const allErrors: string[] = [];
+    console.info("On Blur !!!");
+    
+    {
 
-    if(isDuplicate) 
-    {
-      allErrors.push(`Label "${value}" already exists in Table. Labels must be uniques.`);
-    }
-    if(isEmpty)
-    {
-      allErrors.push(`Empty Label in table !`);
-    }      
-    if( isError )
-    {
-      setErrors(allErrors);
-      setShowError(true);
-    }
-    else
-    {
-      setErrors([]); // clear error if input is valid      
-      setShowError(false);
-    }
+        const isDuplicate = rows.some((row, i) => i !== index && row.label === value);
+        const isEmpty = !value.trim();
+        const isError = isDuplicate || isEmpty;
+        const allErrors: string[] = [];
 
+        if(isDuplicate) 
+        {
+          allErrors.push(`Label "${value}" already exists in Table. Labels must be uniques`);
+        }
+        if(isEmpty)
+        {
+          allErrors.push(`Empty Label in table`);
+        }      
+        if( isError )
+        {
+          openSnackbar(allErrors.join(', '), 'error');
+        }
+      
+    }
   };
 
   const handleRateChange = (index: number, value: number) => {
@@ -113,7 +107,7 @@ const A429GridTable: React.FC = () => {
     border: '1px solid ivory',
   };
 
-    
+   
   return (
     <>
 
@@ -121,11 +115,6 @@ const A429GridTable: React.FC = () => {
       <button onClick={handleAddRow} className="add-btn">Add Label</button>
       <button onClick={removeAll} className="remove-all-btn">Remove all</button>
       </div>
-      <Snackbar open={showError} >
-        <Alert  severity="error">
-          {errors.join(', ')}
-        </Alert>
-      </Snackbar>
 
       <div className="grid-table-container">     
         <table className="grid-table">

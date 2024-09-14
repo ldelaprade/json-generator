@@ -1,12 +1,12 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef  } from 'react';
 
 import { useSelector } from 'react-redux';
 import { setFormState, Arinc429, GridState, FormState, ConfigState } from '../store/formSlice';
 import { store } from '../store/store';
 import { RootState } from '../store/types';
-import { Snackbar } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { useSnackbar } from '../App';
+
 
 
 import { configSchema }  from '../store/configSchema';
@@ -18,16 +18,9 @@ import Ajv from 'ajv';
 const ajv = new Ajv();
 export const configSchemaValidator = ajv.compile(configSchema);
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-
 
 function a429LabelsToArray(input: Arinc429): GridState {
   const labels = Object.entries(input.labels).map(([key, value]) => ({ 'label': key, 'rate': value }));
-
-  //console.info('Labels:', labels);  
   return { rows: labels};
 }
 
@@ -50,10 +43,9 @@ function arrayToA429Labels(input: GridState): Arinc429  {
 
 const Sidebar: React.FC = () => {
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [errors, setErrors] = useState<string[]>([]);
-  const [showError, setShowError] = useState(false);
+  const { openSnackbar } = useSnackbar();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const formData = useSelector((state: RootState) => state.form);
 
   const buttons = [
@@ -102,13 +94,6 @@ const Sidebar: React.FC = () => {
     }
   };
 
-  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setShowError(false);
-  };
-
 
   const handleGenerateJson = () => {
 
@@ -118,8 +103,7 @@ const Sidebar: React.FC = () => {
     console.log(uniqueItems);
     if( hasDuplicate )
     {
-      setErrors(["A429 labels contains duplicates. Please fix then retry"]);
-      setShowError(true);
+      openSnackbar("A429 labels contains duplicates. Please fix then retry", 'error');
       return;
     }
     
@@ -140,9 +124,8 @@ const Sidebar: React.FC = () => {
 
     if (!configSchemaValidator(modifiedState) )
     {
-        const allErrors = (configSchemaValidator.errors || []).map(error => `${error.dataPath}: ${error.message}`);
-        setErrors(allErrors);
-        setShowError(true);
+        const allErrors = (configSchemaValidator.errors || []).map(error => `${error.instancePath}: ${error.message}`);
+        openSnackbar(allErrors.join(', '), 'error');
     }
     else 
     {
@@ -209,11 +192,7 @@ const Sidebar: React.FC = () => {
         </button>
       ))}
 
-      <Snackbar open={showError} autoHideDuration={6000} onClose={handleCloseError}>
-        <Alert onClose={handleCloseError} severity="error">
-          {errors.join(', ')}
-        </Alert>
-      </Snackbar>
+
 
     </div>
   );
