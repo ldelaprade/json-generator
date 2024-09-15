@@ -39,6 +39,7 @@
     "electron:serve": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm run electron:start\"",
     "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/electron.js",
     "electron:build:win": "npm run build && electron-builder --windows  -c.extraMetadata.main=build/electron.js",
+    "electron:build:mac": "npm run build && electron-builder --mac  -c.extraMetadata.main=build/electron.js",
     "electron:start": "wait-on http://localhost:3000 && electron ."
   },
   "build": {
@@ -55,7 +56,13 @@
     },
     "win": {
       "icon": "build/logo512.png"
+    },
+
+    "mac": {
+      "target": "dmg",
+      "icon": "build/logo512.png"
     }
+
   },
   "eslintConfig": {
     "extends": [

@@ -65,29 +65,23 @@ const A429GridTable: React.FC = () => {
 
   // Validate the input onBlur
   const handleBlur = (index: number, value: string) => {
-    console.info("On Blur !!!");
-    
-    {
+      const isDuplicate = rows.some((row, i) => i !== index && row.label === value);
+      const isEmpty = !value.trim();
+      const isError = isDuplicate || isEmpty;
+      const allErrors: string[] = [];
 
-        const isDuplicate = rows.some((row, i) => i !== index && row.label === value);
-        const isEmpty = !value.trim();
-        const isError = isDuplicate || isEmpty;
-        const allErrors: string[] = [];
-
-        if(isDuplicate) 
-        {
-          allErrors.push(`Label "${value}" already exists in Table. Labels must be uniques`);
-        }
-        if(isEmpty)
-        {
-          allErrors.push(`Empty Label in table`);
-        }      
-        if( isError )
-        {
-          openSnackbar(allErrors.join(', '), 'error');
-        }
-      
-    }
+      if(isDuplicate) 
+      {
+        allErrors.push(`Label "${value}" already exists in Table. Labels must be uniques`);
+      }
+      if(isEmpty)
+      {
+        allErrors.push(`Empty Label in table`);
+      }      
+      if( isError )
+      {
+        openSnackbar(allErrors.join(', '), 'error');
+      }
   };
 
   const handleRateChange = (index: number, value: number) => {
