@@ -4,8 +4,7 @@ import './A429GridTable.css';
 import { addRow, removeRow, updateLabel, updateRate, setRows  } from '../store/formSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/types';
-import { useSnackbar } from '../App';
-
+import { useSnackbar } from './LogZone';
 
 
 const A429GridTable: React.FC = () => {

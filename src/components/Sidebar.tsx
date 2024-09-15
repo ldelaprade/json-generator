@@ -1,12 +1,11 @@
 
-import React, { useState, useRef  } from 'react';
+import React, {  useRef  } from 'react';
 
 import { useSelector } from 'react-redux';
 import { setFormState, Arinc429, GridState, FormState, ConfigState } from '../store/formSlice';
 import { store } from '../store/store';
 import { RootState } from '../store/types';
-import { useSnackbar } from '../App';
-
+import { useSnackbar } from './LogZone';
 
 
 import { configSchema }  from '../store/configSchema';
