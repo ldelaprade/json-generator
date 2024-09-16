@@ -1,4 +1,3 @@
-import Ajv from 'ajv';
 import configSchema from './schema_model.json';
 
 
