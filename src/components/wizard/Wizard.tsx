@@ -6,6 +6,8 @@ import AhrsSection from './AhrsSection';
 import WogSourceSection from './WogSourceSection';
 import IgnoredBitsSection from './IgnoredBitsSection';
 import Arinc429Section from './Arinc429Section'
+import GridTable from './GridTable'
+import AGGridTable from './AGGridTable'
 
 // Wizard component
 const Wizard: React.FC = () => {
@@ -16,6 +18,8 @@ const Wizard: React.FC = () => {
       { name: 'AHRS', component: <AhrsSection /> },
       { name: 'WOG Source', component: <WogSourceSection /> },
       { name: 'ARINC429 Labels', component: <Arinc429Section /> },
+      { name: 'ARINC429 Labels 2', component: <GridTable /> },
+      { name: 'ARINC429 Labels 3', component: <AGGridTable /> },
       { name: 'Ignored Bits', component: <IgnoredBitsSection /> }
     ];
   

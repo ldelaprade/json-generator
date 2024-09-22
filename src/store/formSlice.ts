@@ -39,8 +39,14 @@ export interface Arinc429
 
 // we need an array for arinc429 labels grid
 export interface GridRow {
+  id: number;
   label: string;
   rate: number;
+}
+
+interface UpdateRowPayload {
+  id: number;
+  changes: Partial<GridRow>;
 }
 
 export interface GridState {
@@ -180,29 +186,64 @@ const formSlice = createSlice({
     },
 
     // Specifics to a429 labels array
-     
+    
     addRow: (state) => {
-      state.a429Rows.rows.push({ label: '', rate: 0 });
+      const itemWithHigherID = state.a429Rows.rows.reduce(
+        (prev, current) => { return (prev && prev.id > current.id) ? prev : current },
+        {id:0, label: '???', rate: 0} );
+      state.a429Rows.rows.push({ id: itemWithHigherID.id+1, label: '???', rate: 0 });
     },
+
+    addLabel: (state, action: PayloadAction<string>) => {
+      const newLabel = action.payload;
+      const itemWithHigherID = state.a429Rows.rows.reduce(
+        (prev, current) => { return (prev && prev.id > current.id) ? prev : current },
+        {id:0, label: "???", rate: 0} );
+      state.a429Rows.rows.push({ id: itemWithHigherID.id+1, label: newLabel, rate: 0 });
+   },
+
+    updateRow: (state, action: PayloadAction<UpdateRowPayload>) => {
+      const { id, changes } = action.payload;
+      const rowIndex = state.a429Rows.rows.findIndex(row => row.id === id);
+      if (rowIndex !== -1) {
+        // Update the row if found
+        state.a429Rows.rows[rowIndex] = { ...state.a429Rows.rows[rowIndex], ...changes };
+      }
+    },   
+
     removeRow: (state, action: PayloadAction<number>) => {
-      state.a429Rows.rows.splice(action.payload, 1);
+       const id = action.payload;
+       // remove the row if found
+       state.a429Rows.rows = state.a429Rows.rows.filter(row => row.id !== id)
     },
+
     updateLabel: (state, action: PayloadAction<{ index: number; value: string }>) => {
         const { index, value } = action.payload;
-        state.a429Rows.rows[index].label = value;
+        const rowIndex = state.a429Rows.rows.findIndex(row => row.id === index);
+        if (rowIndex !== -1) {
+          // Update the row if found
+          state.a429Rows.rows[rowIndex] = { ...state.a429Rows.rows[rowIndex], label: value };
+        }
     },
     updateRate: (state, action: PayloadAction<{ index: number; value: number }>) => {
       const { index, value } = action.payload;
-      state.a429Rows.rows[index].rate = value;
+      const rowIndex = state.a429Rows.rows.findIndex(row => row.id === index);
+      if (rowIndex !== -1) {
+        // Update the row if found
+        state.a429Rows.rows[rowIndex] = { ...state.a429Rows.rows[rowIndex], rate: value };
+      }
+      
     },
     setRows: (state, action: PayloadAction<GridRow[]>) => {
       state.a429Rows.rows = action.payload;
-    },    
-
+    }
 
   }
 });
 
 
-export const { updateField, setFormState, addRow, removeRow, updateLabel, updateRate, setRows } = formSlice.actions;
+export const { 
+  updateField, setFormState, addRow, addLabel,
+  removeRow, updateLabel, updateRate, 
+  updateRow, setRows } = formSlice.actions;
 export default formSlice.reducer;

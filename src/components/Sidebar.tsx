@@ -19,7 +19,8 @@ export const configSchemaValidator = ajv.compile(configSchema);
 
 
 function a429LabelsToArray(input: Arinc429): GridState {
-  const labels = Object.entries(input.labels).map(([key, value]) => ({ 'label': key, 'rate': value }));
+  let count = 1;
+  const labels = Object.entries(input.labels).map(([key, value]) => ({'id': count++,  'label': key, 'rate': value }));
   return { rows: labels};
 }
 
@@ -183,6 +184,7 @@ const Sidebar: React.FC = () => {
 
       {buttons.map((button) => (
         <button
+        style={{ cursor: 'pointer', margin: 4, border: 0  }}
           key={button.name}
           onClick={() => handleSidebarButtonClick(button.name)}
           className="button"
