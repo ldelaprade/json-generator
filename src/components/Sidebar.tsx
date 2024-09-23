@@ -19,8 +19,8 @@ export const configSchemaValidator = ajv.compile(configSchema);
 
 
 function a429LabelsToArray(input: Arinc429): GridState {
-  const labels = Object.entries(input.labels).map(([key, value]) => ({ 'label': key, 'rate': value }));
-  return { rows: labels};
+  const labels = Object.entries(input.labels).map(([key, value], index) => ({ 'id' : index, 'label': key, 'rate': value }));
+  return { loading: true, rows: labels};
 }
 
 function arrayToA429Labels(input: GridState): Arinc429  {
@@ -30,6 +30,7 @@ function arrayToA429Labels(input: GridState): Arinc429  {
 
     // Iterate over the array and create key-value pairs using 'label' and 'rate'
     input.rows.forEach((item: { label: string, rate: number }) => {
+
       transformedLabels[item.label] = item.rate;
   });
 

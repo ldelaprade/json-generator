@@ -39,12 +39,14 @@ export interface Arinc429
 
 // we need an array for arinc429 labels grid
 export interface GridRow {
+  id: number;
   label: string;
   rate: number;
 }
 
 export interface GridState {
   rows: GridRow[];
+  loading: boolean;
 }
 
 
@@ -132,6 +134,7 @@ const initialState: FormState =
 
     a429Rows: {
       rows: [],
+      loading: false
     },
 
 
@@ -182,7 +185,14 @@ const formSlice = createSlice({
     // Specifics to a429 labels array
      
     addRow: (state) => {
-      state.a429Rows.rows.push({ label: '', rate: 0 });
+
+      // Find the row having the biggest ID
+      const rowMaxId = state.a429Rows.rows.reduce(
+        function(prev, current) {return (prev && prev.id > current.id) ? prev : current },
+        { id: 0, label: "", rate : 0}
+      );
+
+      state.a429Rows.rows.push({ id: rowMaxId.id + 1 ,label: '', rate: 0 });
     },
     removeRow: (state, action: PayloadAction<number>) => {
       state.a429Rows.rows.splice(action.payload, 1);
@@ -197,12 +207,46 @@ const formSlice = createSlice({
     },
     setRows: (state, action: PayloadAction<GridRow[]>) => {
       state.a429Rows.rows = action.payload;
+    },  
+    
+    updateRow: (state, action: PayloadAction<GridRow>) => {
+      const index = state.a429Rows.rows.findIndex(row => row.id === action.payload.id);
+      if (index !== -1) {
+        state.a429Rows.rows[index] = action.payload;
+      }
     },    
+
+
+
+    fetchDataStart: (state) => {
+      state.a429Rows.loading = true;
+    },
+
+    fetchDataSuccess: (state, action: PayloadAction<GridRow[]>) => {
+      state.a429Rows.rows = action.payload;
+      state.a429Rows.loading = false;
+    },
+
+    updateDataItem: (
+      state,
+      action: PayloadAction<{ id: number; field: keyof GridRow; value: any }>
+    ) => {
+      const { id, field, value } = action.payload;
+      const item = state.a429Rows.rows.find(item => item.id === id);
+      if (item) {
+        // Type assertion to tell TypeScript that this operation is safe
+        (item as any)[field] = value;
+      }
+    }
+    
 
 
   }
 });
 
 
-export const { updateField, setFormState, addRow, removeRow, updateLabel, updateRate, setRows } = formSlice.actions;
+export const { updateField, setFormState, addRow, removeRow, updateLabel, updateRate, setRows, updateRow } = formSlice.actions;
+export const { fetchDataStart, fetchDataSuccess, updateDataItem } = formSlice.actions;
 export default formSlice.reducer;
+
+

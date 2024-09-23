@@ -49,7 +49,7 @@ const A429GridTable: React.FC = () => {
 
   const handleAddRow = () => {
     dispatch(addRow());
-    setLastAddedIndex(rows.length);    
+    setLastAddedIndex(rows.length);
   };
 
   const handleRemoveRow = (index: number) => {
@@ -109,7 +109,7 @@ const A429GridTable: React.FC = () => {
       <button onClick={removeAll} className="remove-all-btn">Remove all</button>
       </div>
 
-      <div className="grid-table-container">     
+      <div className="grid-table-container">
         <table className="grid-table">
           <thead style={{ position: 'sticky', top: 0, backgroundColor: '#f2f2f2' }}>
             <tr>
